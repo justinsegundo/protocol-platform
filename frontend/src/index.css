@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background-color: #F7F4EF;
+    color: #1A1A1A;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-forest-700 text-cream px-5 py-2.5 rounded-lg font-body font-medium text-sm transition-all duration-200 hover:bg-forest-500 active:scale-95 inline-flex items-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border border-forest-700 text-forest-700 px-5 py-2.5 rounded-lg font-body font-medium text-sm transition-all duration-200 hover:bg-forest-50 active:scale-95 inline-flex items-center gap-2;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-muted px-4 py-2 rounded-lg font-body text-sm transition-all duration-200 hover:bg-forest-50 hover:text-forest-700 active:scale-95 inline-flex items-center gap-2;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white font-body text-sm text-ink placeholder-muted focus:outline-none focus:ring-2 focus:ring-forest-500 focus:border-transparent transition-all duration-200;
+  }
+
+  .tag {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-forest-50 text-forest-700 border border-forest-100;
+  }
+
+  .star-filled {
+    @apply text-amber-500;
+  }
+
+  .star-empty {
+    @apply text-gray-200;
+  }
+}
+
+.page-enter {
+  animation: fadeUp 0.3s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F4EF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
