@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { logout as logoutApi } from '../../api/auth'
 
@@ -8,8 +8,16 @@ export default function Header() {
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    setDropdownOpen(false)
+    setMenuOpen(false)
+  }, [location.pathname])
 
   const handleLogout = async () => {
+    setDropdownOpen(false)
+    setMenuOpen(false)
     try {
       await logoutApi()
     } finally {
