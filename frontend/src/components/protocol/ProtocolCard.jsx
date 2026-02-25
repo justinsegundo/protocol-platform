@@ -4,7 +4,7 @@ import StarRating from '../ui/StarRating'
 
 export default function ProtocolCard({ protocol }) {
   return (
-    <Link to={`/protocols/${protocol.id}`} className="card p-6 block group">
+    <Link to={`/protocols/${protocol.id}`}  className="card p-6 block group">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div>
           {protocol.category && (

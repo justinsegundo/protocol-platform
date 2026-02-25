@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getThreads } from '../api/threads'
 import ThreadCard from '../components/thread/ThreadCard'
@@ -14,10 +14,39 @@ const SORT_OPTIONS = [
   { value: 'most_commented', label: 'Most Discussed' },
 ]
 
+const STORAGE_KEY = 'threads_sort'
+
 export default function ThreadsPage() {
   const { isAuthenticated } = useAuth()
-  const [sortBy, setSortBy] = useState('latest')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [sortBy, setSortBy] = useState(() => {
+    return (
+      searchParams.get('sort_by') ||
+      sessionStorage.getItem(STORAGE_KEY) ||
+      'latest'
+    )
+  })
+
   const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    const urlSort = searchParams.get('sort_by')
+    if (urlSort && urlSort !== sortBy) {
+      setSortBy(urlSort)
+      sessionStorage.setItem(STORAGE_KEY, urlSort)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    setSearchParams({ sort_by: sortBy }, { replace: true })
+    sessionStorage.setItem(STORAGE_KEY, sortBy)
+  }, [sortBy])
+
+  const handleSort = (value) => {
+    setSortBy(value)
+    setPage(1)
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ['threads', sortBy, page],
@@ -52,7 +81,7 @@ export default function ThreadsPage() {
         {SORT_OPTIONS.map((opt) => (
           <button
             key={opt.value}
-            onClick={() => { setSortBy(opt.value); setPage(1) }}
+            onClick={() => handleSort(opt.value)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150 ${
               sortBy === opt.value
                 ? 'bg-forest-700 text-cream'

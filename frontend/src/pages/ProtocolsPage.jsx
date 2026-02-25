@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getProtocols } from '../api/protocols'
@@ -14,14 +14,37 @@ const SORT_OPTIONS = [
   { value: 'most_reviewed', label: 'Most Reviewed' },
 ]
 
+const STORAGE_KEY = 'protocols_sort'
+
 export default function ProtocolsPage() {
   const { isAuthenticated } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
-  const sortBy = searchParams.get('sort_by') || 'latest'
+
+  const [sortBy, setSortBy] = useState(() => {
+    return (
+      searchParams.get('sort_by') ||
+      sessionStorage.getItem(STORAGE_KEY) ||
+      'latest'
+    )
+  })
+
   const [page, setPage] = useState(1)
 
+  useEffect(() => {
+    const urlSort = searchParams.get('sort_by')
+    if (urlSort && urlSort !== sortBy) {
+      setSortBy(urlSort)
+      sessionStorage.setItem(STORAGE_KEY, urlSort)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    setSearchParams({ sort_by: sortBy }, { replace: true })
+    sessionStorage.setItem(STORAGE_KEY, sortBy)
+  }, [sortBy])
+
   const handleSort = (value) => {
-    setSearchParams({ sort_by: value })
+    setSortBy(value)
     setPage(1)
   }
 
