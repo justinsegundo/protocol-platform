@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getProtocols } from '../api/protocols'
 import ProtocolCard from '../components/protocol/ProtocolCard'
@@ -16,8 +16,14 @@ const SORT_OPTIONS = [
 
 export default function ProtocolsPage() {
   const { isAuthenticated } = useAuth()
-  const [sortBy, setSortBy] = useState('latest')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const sortBy = searchParams.get('sort_by') || 'latest'
   const [page, setPage] = useState(1)
+
+  const handleSort = (value) => {
+    setSearchParams({ sort_by: value })
+    setPage(1)
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ['protocols', sortBy, page],
@@ -52,7 +58,7 @@ export default function ProtocolsPage() {
         {SORT_OPTIONS.map((opt) => (
           <button
             key={opt.value}
-            onClick={() => { setSortBy(opt.value); setPage(1) }}
+            onClick={() => handleSort(opt.value)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150 ${
               sortBy === opt.value
                 ? 'bg-forest-700 text-cream'

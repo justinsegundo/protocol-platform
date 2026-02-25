@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,5 +17,9 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             VoteSeeder::class,
         ]);
+
+        $this->command->info('Indexing data into Typesense...');
+        Artisan::call('typesense:reindex');
+        $this->command->info('Typesense indexing complete.');
     }
 }
